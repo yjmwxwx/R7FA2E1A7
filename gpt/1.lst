@@ -1,0 +1,213 @@
+ARM GAS  1.s 			page 1
+
+
+   1              		.thumb
+   2              		.syntax unified
+   3              		.section .text
+   4              	vectors:
+   5 0000 00410020 		.word zhanding
+   6 0004 BD000000 		.word kaishi + 1
+   7 0008 3D010000 		.word _nmi	+1
+   8 000c 3D010000 		.word _Hard_Fault +1
+   9 0010 00000000 		.word 0
+  10 0014 00000000 		.word 0
+  11 0018 00000000 		.word 0
+  12 001c 00000000 		.word 0
+  13 0020 00000000 		.word 0
+  14 0024 00000000 		.word 0
+  15 0028 3D010000 		.word _svc_handler +1
+  16 002c 00000000 		.word 0
+  17 0030 00000000 		.word 0
+  18 0034 3D010000 		.word _pendsv_handler +1
+  19 0038 3D010000 		.word _systickzhongduan +1  @ 15
+  20 003c 3D010000 		.word aaa +1                @ 0
+  21 0040 3D010000 		.word aaa +1                @ 1
+  22 0044 3D010000 		.word aaa +1                @ 2
+  23 0048 3D010000 		.word aaa +1                @ 3
+  24 004c 3D010000 		.word aaa +1                @ 4
+  25 0050 3D010000 		.word aaa +1         	    @ 5
+  26 0054 3D010000 		.word aaa +1                @ 6
+  27 0058 3D010000 		.word aaa +1                @ 7
+  28 005c 3D010000 		.word aaa +1                @ 8
+  29 0060 3D010000 		.word aaa +1                @ 9
+  30 0064 3D010000 		.word aaa +1                @ 10
+  31 0068 3D010000 		.word aaa +1                @ 11
+  32 006c 3D010000 		.word aaa +1                @ 12
+  33 0070 3D010000 		.word aaa +1                @ 13
+  34 0074 3D010000 		.word aaa +1                @ 14
+  35 0078 3D010000 		.word aaa +1                @ 15
+  36 007c 3D010000 		.word aaa +1                @ 16
+  37 0080 3D010000 		.word aaa +1                @ 17
+  38 0084 3D010000 		.word aaa +1                @ 18
+  39 0088 3D010000 		.word aaa +1                @ 19
+  40 008c 3D010000 		.word aaa +1                @ 20
+  41 0090 3D010000 		.word aaa +1                @ 21
+  42 0094 3D010000 		.word aaa +1                @ 22
+  43 0098 3D010000 		.word aaa +1                @ 23
+  44 009c 3D010000 		.word aaa +1                @ 24
+  45 00a0 3D010000 		.word aaa +1                @ 25
+  46 00a4 3D010000 		.word aaa +1                @ 26
+  47 00a8 3D010000 		.word aaa +1                @ 27
+  48 00ac 3D010000 		.word aaa +1		    @ 28
+  49 00b0 3D010000 		.word aaa +1		    @ 29
+  50 00b4 3D010000 		.word aaa +1		    @ 30
+  51 00b8 3D010000 		.word aaa +1		    @ 31
+  52              	kaishi:
+  53              		@bkpt # 1
+  54              	shizhong:
+  55 00bc 2048     		ldr r0, = 0x4001e000
+  56 00be 40F2FE32 		movw r2, # 0x3fe
+  57 00c2 4AF20151 		movw r1, # 0xa501
+ARM GAS  1.s 			page 2
+
+
+  58 00c6 8152     		strh r1, [r0, r2]	@解锁时钟配置寄存器
+  59 00c8 0021     		movs r1, # 0
+  60 00ca 4186     		strh r1, [r0, # 0x32]	@主时钟开
+  61              	__deng_zhu_shi_zhong_wen_ding:
+  62 00cc C16B     		ldr r1, [r0, # 0x3c]
+  63 00ce 0907     		lsls r1, r1, # 28
+  64 00d0 FCD5     		bpl __deng_zhu_shi_zhong_wen_ding
+  65 00d2 0321     		movs r1, # 0x03
+  66 00d4 C184     		strh r1, [r0, # 0x26]	@主时钟作为时钟源
+  67 00d6 0021     		movs r1, # 0
+  68 00d8 0162     		str r1, [r0, # 0x20]
+  69              	
+  70              	
+  71              	
+  72              		
+  73              		@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  74              		@IO设置@
+  75              		@0x40040000+0x20*m(0-9)
+  76              		@0X00=PCNTR1/PODR (0=输入，1=输出)
+  77              		@0x02=PDR (0=输出低，1=输出高)
+  78              		@0x04=PCNTR2/EIDR (输入状态：0=低，1=高)
+  79              		@0x06=PIDR (ECL_PORT端口事件输入数据：0=低，1=高)
+  80              		@0x08=PCNTR3/PORR (0=不影响别的位，1=高)
+  81              		@0x0a=POSR (0不影响别的位，1=低)
+  82              		@0x0c=PCNTR4/EORR (ELC_PORT: 0=不影响别的端口，1=高)
+  83              		@0x0e=EOSR	(ELC_PORT:0不影响别的端口，1=低)
+  84              		@PFS = 0x4004_0800
+  85              		@0x000 + 0x040 × m + 0x004 × n (PmnPFS)
+  86              		@0x002 + 0x040 × m + 0x004 × n (PmnPFS_HA)
+  87              		@0x003 + 0x040 × m + 0x004 × n (PmnPFS_)
+  88              		@P108、P201、P300的初始值不为0x00000000
+  89              		@P108初始值为0x00010010
+  90              		@P201初始值为0x00000010
+  91              		@P201初始值为0x00000010
+  92              		@P300为0x00010010
+  93              		@位0=端口输出数据（0=低，1=高），位1=PIDR状态（0=低，1=高）
+  94              		@位2=端口方向（1=输入，0=输出），位4=拉（0=禁输入上拉，1=输入上拉）
+  95              		@位6=开漏（0=CMOS输出，1=NMOS开漏输出）
+  96              		@位12-13上下事件（00=不关心，01=检测上升，10=检测下降）
+  97              		@位14 IRQ（0不作为IRQ输入引脚，1作为IRQ输入引脚）
+  98              		@位15 模拟功能（0=不作为模拟引脚，1=作为模拟引脚）
+  99              		@位16复用（0=作为通用IO，1=作为外设IO）
+ 100              		@位24-28 外设选择
+ 101              		@写保护=0x40040800+0x503
+ 102              		@位6（0=禁止写PmnPFS寄存器，1=使能写PmnPFS寄存器）
+ 103              		@位7（0=使能写PFSWE位，1=禁止写PFSWE位）
+ 104              		@端口读取等待控制=0x40040800+0x50f
+ 105              		@位0-1（00=设置禁止,01=插入1周期等待)
+ 106              		@      (02=插入2周期等待,03=插入3周期等待）
+ 107              	
+ 108              		
+ 109 00da 1A48     		ldr r0, = 0x40040000
+ 110 00dc 0121     		movs r1, #  0x01
+ 111 00de 4180     		strh r1, [r0, # 0x02]
+ 112 00e0 0121     		movs r1, # 0x01
+ 113 00e2 4181     		strh r1, [r0, # 0x0a]
+ 114              		
+ARM GAS  1.s 			page 3
+
+
+ 115 00e4 184B     		ldr r3, = 0x40040800
+ 116 00e6 40F20352 		movw r2, # 0x503
+ 117 00ea 0021     		movs r1, # 0
+ 118 00ec 9954     		strb r1, [r3, r2]
+ 119 00ee 4021     		movs r1, # 0x40
+ 120 00f0 9954     		strb r1, [r3, r2]
+ 121              		
+ 122 00f2 40F20012 		movw r2, # 0x100
+ 123 00f6 D218     		adds r2, r2, r3
+ 124 00f8 1449     		ldr r1, = 0x3010000
+ 125 00fa 1160     		str r1, [r2]
+ 126              	
+ 127              	@	bkpt # 2
+ 128              	__mo_kuai_kong_zhi:			@外设模块开关
+ 129 00fc 1448     		ldr r0, = 0x40047000
+ 130 00fe 1549     		ldr r1, = 0xffff3fbf
+ 131 0100 8160     		str r1, [r0, # 0x08]
+ 132              		
+ 133              	__gpt_shezhi:				@定时器初始化
+ 134 0102 1548     		ldr r0, = 0x40078900	@GPT，4=0X400到9=0X900
+ 135 0104 4AF20051 		movw r1, # 0xa500
+ 136 0108 0180     		strh r1, [r0]
+ 137 010a 40F20021 		movw r1, # 0x200
+ 138 010e 4160     		str r1, [r0, # 0x04]	@开GPT,0、4-9
+ 139 0110 0121     		movs r1, # 0x01
+ 140 0112 C162     		str r1, [r0, # 0x2c]
+ 141 0114 40F20311 		movw r1, # 0x103
+ 142 0118 4163     		str r1, [r0, # 0x34]	@GTIOR 通用PWM定时器IO控制寄存器
+ 143 011a 40F20101 		ldr r1, = 1
+ 144 011e C164     		str r1, [r0, # 0x4c]	@GTCRK捕获比较
+ 145              					@0X4C，0X50，0X54，0X58，0X5C，0X60
+ 146              	
+ 147 0120 42F20F71 		ldr r1, = 9999
+ 148 0124 4166     		str r1, [r0, # 0x64]	@GTPR	定时器最大计数值
+ 149              		
+ 150              		
+ 151              	ting:
+ 152 0126 0748     		ldr r0, = 0x40040000
+ 153 0128 0121     		movs r1, # 0x01
+ 154 012a 0C4A     		ldr r2, = 0xfffff
+ 155 012c 4181     		strh r1, [r0, # 0x0a]
+ 156              	__led_kai_yanshi:
+ 157 012e 013A     		subs r2, r2, # 1
+ 158 0130 FDD1     		bne __led_kai_yanshi
+ 159 0132 0181     		strh r1, [r0, # 0x08]
+ 160 0134 094A     		ldr r2, = 0xfffff
+ 161              	__led_guan_yanshi:
+ 162 0136 013A     		subs r2, r2, # 1
+ 163 0138 FDD1     		bne __led_guan_yanshi
+ 164 013a F4E7     		b ting
+ 165              	_nmi:
+ 166              	_Hard_Fault:
+ 167              	_svc_handler:
+ 168              	_pendsv_handler:	
+ 169              	_systickzhongduan:
+ 170              	aaa:
+ 171 013c 7047     		bx lr
+ARM GAS  1.s 			page 4
+
+
+ 172              		
+ 173 013e 0000     		.section .data
+ 174              		.equ zhanding,	0x20004100
+ 175              		
+ARM GAS  1.s 			page 5
+
+
+DEFINED SYMBOLS
+                 1.s:4      .text:00000000 vectors
+                            *ABS*:20004100 zhanding
+                 1.s:52     .text:000000bc kaishi
+                 1.s:165    .text:0000013c _nmi
+                 1.s:166    .text:0000013c _Hard_Fault
+                 1.s:167    .text:0000013c _svc_handler
+                 1.s:168    .text:0000013c _pendsv_handler
+                 1.s:169    .text:0000013c _systickzhongduan
+                 1.s:170    .text:0000013c aaa
+                 1.s:54     .text:000000bc shizhong
+                            .text:00000000 $d
+                 1.s:55     .text:000000bc $t
+                 1.s:61     .text:000000cc __deng_zhu_shi_zhong_wen_ding
+                 1.s:128    .text:000000fc __mo_kuai_kong_zhi
+                 1.s:133    .text:00000102 __gpt_shezhi
+                 1.s:151    .text:00000126 ting
+                 1.s:156    .text:0000012e __led_kai_yanshi
+                 1.s:161    .text:00000136 __led_guan_yanshi
+                 1.s:173    .text:0000013e $d
+                 1.s:175    .text:00000140 $d
+
+NO UNDEFINED SYMBOLS
