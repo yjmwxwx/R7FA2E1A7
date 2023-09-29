@@ -393,10 +393,10 @@ __gpt_shezhi:					@定时器初始化
 ting:
 
 __adc_xianshi:	
-	ldr r0, = shangbi_r 	@z_r
+	ldr r0, = z_r 	@z_r
 	@ldr r0, = 0x4005c022
 	ldr r0, [r0]
-	ldr r1, = 32251
+	ldr r1, = 31875
 	muls r0, r0, r1
 	asrs r0, r0, # 15
 	
@@ -426,7 +426,33 @@ __jishu:
 __jishu_fanhui:
 	bx lr
 
-
+__xiangwei_xuanzhuan:
+	push {r2-r7,lr}
+@	ldr r0, = f_jiaodu_r  @-3697
+@	ldr r1, = f_jiaodu_i  @32558
+@	ldr r0, [r0]
+	@	ldr r1, [r1]
+	ldr r0, = 31981
+	ldr r1, = 7135
+	ldr r2, = shangbi_r
+	ldr r3, = shangbi_i
+	ldr r4, [r2]
+	ldr r5, [r3]
+	mov r6, r0
+	mov r7, r1
+	muls r0, r0, r4 @X*COS
+	muls r7, r7, r5 @Y*SIN
+	muls r1, r1, r4 @X*SIN
+	muls r6, r6, r5 @Y*COS
+	adds r0, r0, r7
+	subs r1, r6, r1
+	asrs r0, r0, # 15
+	asrs r1, r1, # 15
+	ldr r2, = z_r
+	ldr r3, = z_i
+	str r0, [r2]
+	str r1, [r3]
+	pop {r2-r7,pc}
 
 __xianshi_zukang_danwei:
 	push {r0-r4,lr}
@@ -6877,13 +6903,15 @@ _systickzhongduan:	@syzd
 	ldr r1, = shangbi_r
 	str r0, [r1]
 
-	ldr r0, = shangbi_r
-	ldr r1, = shangbi_i
-	ldr r0, [r0]
-	ldr r1, [r1]
-	bl __ji_suan_fu_du
-	ldr r1, = z_r
-	str r0, [r1]
+	bl __xiangwei_xuanzhuan
+@	ldr r0, = shangbi_r
+@	ldr r1, = shangbi_i
+@	ldr r0, [r0]
+@	ldr r1, [r1]
+@
+@	bl __ji_suan_fu_du
+@	ldr r1, = z_r
+@	str r0, [r1]
 
 __systick_fanhui:
 	ldr r0, = 0xe0000d04
