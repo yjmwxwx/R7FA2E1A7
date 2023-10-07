@@ -126,8 +126,15 @@ buzhidao1:
 	.int 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
 	
 kaishi:
-@	bkpt # 1
+	bkpt # 1
 
+        ldr r0, = 0x407ec000
+
+	movs r1, # 0x01
+	movs r2, # 0x90
+	strb r1, [r0, r2]
+	
+	
 shizhong:
 	ldr r0, = 0x4001e000
 	movw r2, # 0x3fe
@@ -160,7 +167,229 @@ _neicunqinglingxunhuan:
 	cmp r0, r2
 	bne _neicunqinglingxunhuan
 
+	
+__xie_flash:
+	ldr r0, = 0x407ec000
+	
+	movs r1, # 0x01
+	movs r2, # 0x90
+	strb r1, [r0, r2]
+	
+	movw r1, # 0xaa80
+	movw r2, # 0x3fb0
+	strh r1, [r0, r2]
 
+	movs r1, # 0xa5
+	movw r2, # 0x180
+	strb r1, [r0, r2]
+
+	movs r1, # 0x10
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0xef
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x10
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+	
+	movs r1, # 0x1f
+	movw r2, # 0x1d8
+	strb r1, [r0, r2]
+
+	movw r1, # 0xfe00
+	movw r2, # 0x110
+	strh r1, [r0, r2]
+	
+	movw r1, # 0x0000
+	movw r2, # 0x108
+	strh r1, [r0, r2]
+	
+	movw r1, # 0xfe00
+        movw r2, # 0x120
+	strh r1, [r0, r2]
+	
+	movw r1, # 0x0fff
+        movw r2, # 0x118
+	strh r1, [r0, r2]
+	
+@	movs r1, # 0xa5			@写FLASH
+@	movw r2, # 0x130
+@	strb r1, [r0, r2]
+
+	movs r1, # 0x84			@0X81写
+	movw r2, # 0x114
+	strb r1, [r0, r2]	@FCR
+
+	movw r2, # 0x12c
+__FRDY_1:	
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 25
+	bpl __FRDY_1
+
+	movs r1, # 0x01
+	movw r2, # 0x114
+	strb r1, [r0, r2]       @FCR
+
+	movs r1, # 0x00
+	movw r2, # 0x114
+	strb r1, [r0, r2]       @FCR
+
+	movw r2, # 0x12c
+__FRDY_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 25
+	bmi __FRDY_0
+
+        movw r2, # 0x1f0
+__ILGLERR_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 28
+	bmi __ILGLERR_0
+
+	movw r2, # 0x1f0
+__PRGERR_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 30
+	bmi __PRGERR_0
+	
+        movw r1, # 0xaa00
+	movw r2, # 0x3fb0
+	strh r1, [r0, r2]
+	
+	movs r1, # 0xa5
+	movw r2, # 0x180
+	strb r1, [r0, r2]
+
+	movs r1, # 0x08
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0xf7
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x08
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+	
+	
+@	bkpt # 2
+
+	ldr r0, = 0x407ec000
+
+	movs r1, # 0x01
+	movs r2, # 0x90
+	strb r1, [r0, r2]
+
+	movw r1, # 0xaa80
+	movw r2, # 0x3fb0
+	strh r1, [r0, r2]
+
+	movs r1, # 0xa5
+	movw r2, # 0x180
+	strb r1, [r0, r2]
+
+	movs r1, # 0x10
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0xef
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x10
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x1f
+	movw r2, # 0x1d8
+	strb r1, [r0, r2]
+
+	movw r1, # 0xfe00
+	movw r2, # 0x110
+	strh r1, [r0, r2]
+
+	movw r1, # 0x0000
+	movw r2, # 0x108
+	strh r1, [r0, r2]
+
+	movw r1, # 0xfe00
+	movw r2, # 0x120
+	strh r1, [r0, r2]
+
+	movw r1, # 0x0fff
+	movw r2, # 0x118
+	strh r1, [r0, r2]
+
+	movs r1, # 0xa5			@写FLASH
+	movw r2, # 0x130
+	strb r1, [r0, r2]
+
+	movs r1, # 0x81			@0X81写
+	movw r2, # 0x114
+	strb r1, [r0, r2]	@FCR
+
+	movw r2, # 0x12c
+___FRDY_1:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 25
+	bpl ___FRDY_1
+
+	movs r1, # 0x01
+	movw r2, # 0x114
+	strb r1, [r0, r2]       @FCR
+
+	movs r1, # 0x00
+	movw r2, # 0x114
+	strb r1, [r0, r2]       @FCR
+
+	movw r2, # 0x12c
+___FRDY_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 25
+	bmi ___FRDY_0
+
+	movw r2, # 0x1f0
+___ILGLERR_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 28
+	bmi ___ILGLERR_0
+
+	movw r2, # 0x1f0
+___PRGERR_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 30
+	bmi ___PRGERR_0
+
+	movw r1, # 0xaa00
+	movw r2, # 0x3fb0
+	strh r1, [r0, r2]
+
+	movs r1, # 0xa5
+	movw r2, # 0x180
+	strb r1, [r0, r2]
+
+	movs r1, # 0x08
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0xf7
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x08
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+@	bkpt # 3
+	
+
+
+__io_shezhi:	
+	
 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 	@IO设置@
 	@0x40040000+0x20*m(0-9)
@@ -197,6 +426,9 @@ _neicunqinglingxunhuan:
 	@      (02=插入2周期等待,03=插入3周期等待）
 	@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+	ldr r0, = 0x40040000
+	movw r1, # 0x8000
+	strh r1, [r0, # 0x02]
 
         ldr r0, = 0x400400a0
 	movs r1, # 0x01
@@ -236,6 +468,9 @@ _neicunqinglingxunhuan:
 	str r1, [r3, # 0x04]
 	str r1, [r3]
 	
+	movs r1, # 0x10
+	str r1, [r3, # 0x64]
+	str r1, [r3, # 0x68]
 	
 __mo_kuai_kong_zhi:				@外设模块开关
 	ldr r0, = 0x4001e3fe
@@ -337,7 +572,7 @@ __systick_kai:
 	str r3, [r4]    @systick 开
 	ldr r0, = lvbo_changdu		@lbq
 	ldr r1, = lvbo_youyi
-	movw r2, # 200
+	movw r2, # 300
 	str r2, [r0]
 	movs r2, # 11
 	str r2, [r1]
@@ -387,16 +622,594 @@ __gpt_shezhi:					@定时器初始化
 	str r1, [r0, # 0x64]	@GTPR	定时器最大计数值
 
 	ldr r0, = liangcheng
-	movs r1, # 1
+	movs r1, # 0
 	str r1, [r0]
 	bl __xianshi_zukang_danwei
+
+
+
+
+
+
+ddaa:	
+	ldr r0, = 0x40100000
+	ldrh r0, [r0]
+	movs r1, # 6
+	ldr r2, = asciibiao
+	movs r3, # 0xff            @小数点位置
+	bl _zhuanascii
+	movs r0, # 6            @写几个字
+	movs r1, # 48           @字库单字长度
+	movs r2, # 3            @宽度
+	ldr r3, = 0x1102              @lcd位置
+	bl __xie_lcd_ascii
+	b ddaa
+
+
+
+
+
+	
+
+__anjian0:
+	b ting
+	.ltorg
+__anjian1:
+__dangwei_jia_deng_songshou:
+	bl __an_jian
+	cmp r0, # 3
+	beq __anjian3
+	cmp r0, # 0
+	beq __dangwei_jia_le
+	bl __xiangwei_xuanzhuan
+	ldr r0, = z_r
+	ldr r0, [r0]
+	ldr r1, = f_r
+	ldr r2, = f_chuchang_r
+	bl __xianshi_neizu
+	b __dangwei_jia_deng_songshou
+__dangwei_jia_le:
+	ldr r0, = liangcheng
+	ldr r1, [r0]
+	adds r1, r1, # 1
+	str r1, [r0]
+	cmp r1, # 2
+	bne __anjian1_fanhui
+	movs r1, # 0
+	str r1, [r0]
+
+__anjian1_fanhui:
+	b __ren_wu_diao_du
+	.ltorg
+__anjian2:
+__xianshi_jiaodu:
+	ldr r2, = jiaodu
+	ldr r0, = shangbi_r
+	ldr r1, = shangbi_i
+	ldr r0, [r0]
+	ldr r1, [r1]
+	asrs r0, r0, # 3
+	asrs r1, r1, # 3
+	bl __atan2_ji_suan
+	asrs r0, r0, # 15
+	str r0, [r2]
+	bl __xianshi_j_d
+	bl __xianshi_jiaodu_fuhao
+	b __ren_wu_diao_du
+__xianshi_j_d:
+	push {r1-r4,lr}
+	mov r4, r0
+	movs r0, r0
+	bpl __xian_shi_j_d
+	mvns r0, r0
+	adds r0, r0, # 1
+	mov r4, r0
+__j_d_shi_fu:
+	ldr r0, = _fu
+	movs r1, # 1           @显示几个字符
+	ldr r2, = 0x0803         @LCD位置lcd位置(高8位0-0x83,低8位0-7)
+	bl __xie_ascii
+	b __xianshi_j_d1
+__xian_shi_j_d:
+	ldr r0, = kong
+	movs r1, # 1           @显示几个字符
+	ldr r2, = 0x0803         @LCD位置lcd位置(高8位0-0x83,低8位0-7)
+	bl __xie_ascii
+__xianshi_j_d1:
+	mov r0, r4
+	movs r1, # 6
+	ldr r2, = asciibiao
+	movs r3, # 3            @小数点位置
+	bl _zhuanascii
+	movs r0, # 6            @写几个字
+	movs r1, # 48           @字库单字长度
+	movs r2, # 3            @宽度
+	ldr r3, = 0x1102              @lcd位置
+	bl __xie_lcd_ascii
+	pop {r1-r4,pc}
+
+__xianshi_jiaodu_fuhao:
+	push {r0-r4,lr}
+        movs r0, # 99
+	movs r1, # 2             @两个字符
+	ldr r2, = asciibiao
+	movs r3, # 0xff
+	bl _zhuanascii
+	movs r0, # 2            @写几个字
+	movs r1, # 45           @字库单字长度
+	movs r2, # 3            @宽度
+	ldr r3, = 0x6502              @lcd位置(高8位0-0x83,低8位0-7)
+	ldr r4, = danweibiao
+	bl __xie_alabo
+	pop {r0-r4,pc}
+
+	
+__anjian3:
+	bl __xianshi_jiaozhun_caidan
+	bl __an_jian
+	cmp r0, # 3
+	beq __anjian3
+	cmp r0, # 0
+	bne __anjian3
+__anjian3_xunhuan:
+	bl __xianshi_jiaozhun_caidan
+	bl __an_jian
+	cmp r0, # 1
+	beq __jiaozhun_caidan_jia_deng_songshou
+	cmp r0, # 2
+	beq __jinru_jiaozhun_caidan_deng_songshou
+	b __anjian3_xunhuan
+__jiaozhun_caidan_jia_deng_songshou:
+	bl __an_jian
+	cmp r0, # 3
+	beq __tiaochu_anjian3
+	cmp r0, # 0
+	beq __jiaozhun_caidan_jia_le
+	bl __xianshi_jiaozhun_caidan
+	b __jiaozhun_caidan_jia_deng_songshou
+__jiaozhun_caidan_jia_le:
+	ldr r0, = jiaozhun_bianhao
+	ldr r1, [r0]
+	adds r1, r1, # 1
+	str r1, [r0]
+	cmp r1, # 3
+	bne __anjian3_fanhui
+	movs r1, # 0
+	str r1, [r0]
+__anjian3_fanhui:
+	b __anjian3_xunhuan
+__tiaochu_anjian3:
+	ldr r0, = wan
+	movs r1, # 4
+	ldr r2, =  0x01
+	bl __xie_ascii
+
+	ldr r7, = 0xffffff
+__yy1:
+	subs r7, r7, # 1
+	bne __yy1
+	ldr r0, = kong
+	movs r1, # 4           @显示几个字符
+	ldr r2, = 0x01         @LCD位置lcd位置(高8位0-0x83,低8位0-7)
+	bl __xie_ascii
+	b ting
+__xianshi_jiaozhun_caidan:
+	push {r0-r2,lr}
+	ldr r2, = jiaozhun_bianhao
+	ldr r0, = p0
+	ldrb r2, [r2]
+	lsls r2, r2, # 2
+	adds r0, r0, r2
+	movs r1, # 4
+	ldr r2, =  0x01
+	bl __xie_ascii
+	pop {r0-r2,pc}
+
+__jinru_jiaozhun_caidan_deng_songshou:
+	bl __an_jian
+	cmp r0, # 3
+	beq __anjian3
+	cmp r0, # 0
+	beq __jinru_jiaozhun_caidan
+	bl __xianshi_jiaozhun_caidan
+	b __jinru_jiaozhun_caidan_deng_songshou
+
+__jinru_jiaozhun_caidan:
+	ldr r0, = jiaozhun_bianhao
+	ldr r0, [r0]
+	lsls r0, r0, # 2
+	ldr r1, = jiaozhun_biao
+	ldr r2, [r1, r0]
+	mov pc, r2
+
+	
+__qingling:
+
+	ldr r0, = p0jz
+	movs r1, # 4
+	ldr r2, =  0x01
+	bl __xie_ascii
+	bl __du_jiaozhunbiao
+	ldr r0, = liangcheng
+	movs r1, # 0
+	str r1, [r0]
+__duanlu_qingling:
+	bl __duanlu_qingling_xianshi
+	bl __an_jian
+	cmp r0, # 1
+	beq __qingling_jia
+	cmp r0, # 2
+	beq __qingling_jian
+	b __duanlu_qingling
+__qingling_jia:
+	bl __an_jian
+	cmp r0, # 3
+	beq __qingling_baocun
+	cmp r0, # 0
+	beq __qingling_jiale
+	bl __duanlu_qingling_xianshi
+	b __qingling_jia
+__qingling_jiale:
+	ldr r0, = liangcheng
+	ldr r0, [r0]
+	lsls r0, r0, # 2
+	ldr r1, = r
+	ldr r2, [r1, r0]
+	adds r2, r2, # 1
+	str r2, [r1, r0]
+	b __duanlu_qingling
+__qingling_jian:
+	bl __an_jian
+	cmp r0, # 3
+	beq __qingling_baocun
+	cmp r0, # 0
+	beq __qingling_jianle
+	bl __duanlu_qingling_xianshi
+	b __qingling_jian
+__qingling_jianle:
+	ldr r0, = liangcheng
+	ldr r0, [r0]
+	lsls r0, r0, # 2
+	ldr r1, = r
+	ldr r2, [r1, r0]
+	subs r2, r2, # 1
+	str r2, [r1, r0]
+	b __duanlu_qingling
+
+__qingling_baocun:
+	ldr r0, = liangcheng
+	ldr r1, [r0]
+	adds r1, r1, # 1
+	str r1, [r0]
+	cmp r1, # 2
+	bne __duanlu_qingling
+__duanlu_qingling_wan:
+	movs r1, # 0
+	str r1, [r0]
+
+	ldr r0, = wan
+	movs r1, # 4
+	ldr r2, =  0x01
+	bl __xie_ascii
+
+
+	ldr r7, = 0xffffff
+__yy:
+	subs r7, r7, # 1
+	bne __yy
+@	bl __xie_flash
+	bkpt # 1
+	
+
+__duanlu_qingling_xianshi:
+	push {r0-r2,lr}
+	bl __xiangwei_xuanzhuan
+	ldr r0, = z_r
+	ldr r0, [r0]
+	ldr r1, = r
+	ldr r2, = chuchang_r
+	bl __xianshi_neizu
+	bl __xianshi_zukang_danwei
+	pop {r0-r2,pc}
+
+	
+__xiangwei:
+	bl __du_jiaozhunbiao
+	ldr r0, = liangcheng
+	movs r1, # 0
+	str r1, [r0]
+
+__shezhi_jiaodu:
+	bl __xianshi_jiaodu_fuhao
+
+__shezhi_jiaodu1:
+	ldr r0, = p1jz
+	movs r1, # 4
+	ldr r2, =  0x01
+	bl __xie_ascii
+	bl __shezhi_jiaodu_xianshi
+	bl __an_jian
+	cmp r0, # 1
+	beq __jiaodu_jia
+	cmp r0, # 2
+	beq __jiaodu_jian
+	b __shezhi_jiaodu1
+__jiaodu_jia:
+	bl __an_jian
+	cmp r0, # 3
+	beq __jiaodu_shezhi_wan
+	cmp r0, # 0
+	beq __jiaodu_jiale
+	bl __shezhi_jiaodu_xianshi
+	b __jiaodu_jia
+__jiaodu_jiale:
+	ldr r1, = qiwang_jiaodu
+	ldr r2, [r1, r0]
+	adds r2, r2, # 1
+	str r2, [r1, r0]
+	b __shezhi_jiaodu1
+__jiaodu_jian:
+	bl __an_jian
+	cmp r0, # 3
+	beq __jiaodu_shezhi_wan
+	cmp r0, # 0
+	beq __jiaodu_jianle
+	bl __shezhi_jiaodu_xianshi
+	b __jiaodu_jian
+__jiaodu_jianle:
+	ldr r1, = qiwang_jiaodu
+	ldr r2, [r1]
+	subs r2, r2, # 1
+	str r2, [r1]
+	b __shezhi_jiaodu1
+
+__jiaodu_shezhi_wan:
+	ldr r0, = shangbi_r
+	ldr r1, = shangbi_i
+	ldr r0, [r0]
+	ldr r1, [r1]
+	asrs r0, r0, # 3
+	asrs r1, r1, # 3
+	bl __atan2_ji_suan
+	asrs r0, r0, # 15
+	ldr r1, = qiwang_jiaodu
+	ldr r1, [r1]
+	subs r0, r0, r1
+	bl __jisuan_cos_sin
+	ldr r2, = jiaodu_r
+	ldr r3, = jiaodu_i
+	str r0, [r2]
+	str r1, [r3]
+
+	ldr r0, = wan
+	movs r1, # 4
+	ldr r2, =  0x01
+	bl __xie_ascii
+
+	ldr r7, = 0xffffff
+__yy2:
+	subs r7, r7, # 1
+	bne __yy2
+	@	bl __xie_flash
+	bkpt # 1
+	
+__shezhi_jiaodu_xianshi:
+	push {r0-r1,lr}
+	ldr r0, = qiwang_jiaodu
+	ldr r0, [r0]
+	bl __xianshi_j_d
+	pop {r0-r1,pc}
+
+__z_r:
+	ldr r0, = p2jz
+	movs r1, # 4
+	ldr r2, =  0x01
+	bl __xie_ascii
+	bl __du_jiaozhunbiao
+	ldr r0, = liangcheng
+	movs r1, # 0
+	str r1, [r0]
+__shezhi_z_r:
+	bl __shezhi_z_r_xianshi
+	bl __an_jian
+	cmp r0, # 1
+	beq __shezhi_z_r_jia
+	cmp r0, # 2
+	beq __shezhi_z_r_jian
+	b __shezhi_z_r
+__shezhi_z_r_jia:
+	bl __an_jian
+	cmp r0, # 3
+	beq __shezhi_z_r_baocun
+	cmp r0, # 0
+	beq __shezhi_z_r_jiale
+	bl __shezhi_z_r_xianshi
+	b __shezhi_z_r_jia
+__shezhi_z_r_jiale:
+	ldr r0, = liangcheng
+	ldr r0, [r0]
+	lsls r0, r0, # 2
+	ldr r1, = chuchang_r
+	ldr r2, [r1, r0]
+	adds r2, r2, # 1
+	str r2, [r1, r0]
+	b __shezhi_z_r
+__shezhi_z_r_jian:
+	bl __an_jian
+	cmp r0, # 3
+	beq __shezhi_z_r_baocun
+	cmp r0, # 0
+	beq __shezhi_z_r_jianle
+	bl __shezhi_z_r_xianshi
+	b __shezhi_z_r_jian
+__shezhi_z_r_jianle:
+	ldr r0, = liangcheng
+	ldr r0, [r0]
+	lsls r0, r0, # 2
+	ldr r1, = chuchang_r
+	ldr r2, [r1, r0]
+	subs r2, r2, # 1
+	str r2, [r1, r0]
+	b __shezhi_z_r
+
+__shezhi_z_r_baocun:
+	ldr r0, = liangcheng
+	ldr r1, [r0]
+	adds r1, r1, # 1
+	str r1, [r0]
+	cmp r1, # 2
+	bne __shezhi_z_r
+__shezhi_z_r_wan:
+	movs r1, # 0
+	str r1, [r0]
+
+	ldr r0, = wan
+	movs r1, # 4
+	ldr r2, =  0x01
+	bl __xie_ascii
+
+	ldr r7, = 0xffffff
+__yy3:
+	subs r7, r7, # 1
+	bne __yy3
+@	bl __xie_flash
+	bkpt # 1
+
+__shezhi_z_r_xianshi:
+	push {r0-r1,lr}
+	bl __xiangwei_xuanzhuan
+	ldr r0, = z_r
+	ldr r0, [r0]
+	ldr r1, = r
+	ldr r2, = chuchang_r
+	bl __xianshi_neizu
+	bl __xianshi_zukang_danwei
+	pop {r0-r1,pc}
+
+	
+
+	
+__ren_wu_diao_du:
+	bl __an_jian
+	lsls r0, r0, # 2
+	ldr r1, = an_jian_biao
+	ldr r2, [r1, r0]
+	mov pc, r2
+__an_jian:
+	@入口PA2=按键1，PA3=按键2
+	@出口R0
+	push {r1}
+	ldr r0, = 0x40040864
+	ldr r1, [r0, # 0x04]
+	ldr r0, [r0]
+	mvns r1, r1
+	mvns r0, r0
+	lsls r0, r0, # 30
+	lsrs r0, r0, # 31
+	lsls r1, r1, # 30
+	lsrs r1, r1, # 31
+	lsls r1, r1, # 1
+	orrs r0, r0, r1
+	pop {r1}
+	bx lr
+__du_jiaozhunbiao:
+	ldr r0, = f_chuchang_r
+	ldr r1, [r0]
+	ldr r2, [r0, # 0x04]
+	ldr r3, [r0, # 0x08]
+	ldr r4, [r0, # 0x0c]
+	ldr r5, [r0, # 0x10]
+	ldr r6, [r0, # 0x14]
+	ldr r7, [r0, # 0x18]
+	ldr r0, = chuchang_r
+	str r1, [r0]
+	str r2, [r0, # 0x04]
+	str r3, [r0, # 0x08]
+	str r4, [r0, # 0x0c]
+	str r5, [r0, # 0x10]
+	str r6, [r0, # 0x14]
+	str r7, [r0, # 0x18]
+	bx lr
+	.ltorg
+
+	
 ting:
+	bl __xiangwei_xuanzhuan	
+	ldr r0, =  z_r
+	ldr r0, [r0]
+	ldr r1, = f_r
+	ldr r2, = f_chuchang_r
+	bl __xianshi_neizu
+	bl __xianshi_zukang_danwei
+	b __ren_wu_diao_du
+
+	
+__xianshi_neizu:
+	push {r3-r6,lr}
+	mov r4, r0
+	mov r5, r1
+	mov r6, r2
+	ldr r0, = liangcheng
+	ldr r0, [r0]
+	ldr r3, = xiaoshudian_weizhi
+	ldrb r3, [r3, r0]
+	lsls r0, r0, # 2
+	ldr r6, [r6, r0]
+	ldr r5, [r5, r0]
+	subs r4, r4, r5
+	mov r0, r4
+	muls r0, r0, r6
+	asrs r0, r0, # 15
+	mov r4, r0
+	movs r0, r0
+	bpl __xian_shi_nei_zu
+	mvns r0, r0
+	adds r0, r0, # 1
+	mov r4, r0
+__z_r_shi_fu:
+	ldr r0, = _fu
+	movs r1, # 2           @显示几个字符
+	ldr r2, = 0x0803         @LCD位置lcd位置(高8位0-0x83,低8位0-7)
+	bl __xie_ascii
+	b __xianshi_z_r
+__xian_shi_nei_zu:
+	ldr r0, = kong
+	movs r1, # 2           @显示几个字符
+	ldr r2, = 0x0803         @LCD位置lcd位置(高8位0-0x83,低8位0-7)
+	bl __xie_ascii
+__xianshi_z_r:
+	mov r0, r4
+	movs r1, # 6
+	ldr r2, = asciibiao
+@	movs r3, # 4            @小数点位置
+	bl _zhuanascii
+	movs r0, # 6            @写几个字
+	movs r1, # 48           @字库单字长度
+	movs r2, # 3            @宽度
+	ldr r3, = 0x1102              @lcd位置
+	bl __xie_lcd_ascii
+	pop {r3-r6,pc}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 
 __adc_xianshi:	
 	ldr r0, = z_r 	@z_r
 	@ldr r0, = 0x4005c022
 	ldr r0, [r0]
-	ldr r1, = 31875
+	ldr r1, = 29075
 	muls r0, r0, r1
 	asrs r0, r0, # 15
 	
@@ -426,14 +1239,13 @@ __jishu:
 __jishu_fanhui:
 	bx lr
 
+
 __xiangwei_xuanzhuan:
 	push {r2-r7,lr}
-@	ldr r0, = f_jiaodu_r  @-3697
-@	ldr r1, = f_jiaodu_i  @32558
-@	ldr r0, [r0]
-	@	ldr r1, [r1]
-	ldr r0, = 31981
-	ldr r1, = 7135
+	ldr r0, = f_jiaodu_r  
+	ldr r1, = f_jiaodu_i 
+	ldr r0, [r0]
+	ldr r1, [r1]
 	ldr r2, = shangbi_r
 	ldr r3, = shangbi_i
 	ldr r4, [r2]
@@ -453,7 +1265,227 @@ __xiangwei_xuanzhuan:
 	str r0, [r2]
 	str r1, [r3]
 	pop {r2-r7,pc}
+__jisuan_cos_sin:						@jd
+	@入口R0=角度 （-18000到+18000）
+	@出口R0=COS，R1=SIN
+	push {r2-r7,lr}
+	ldr r1, = 18000
+	cmp r0, r1
+	bls __xiaoyu_180
+	subs r0, r0, r1
+	movs r7, # 1
+	b __js_cos_sin
+__xiaoyu_180:
+	movs r7, # 0
+__js_cos_sin:
+	ldr r1, = 9000
+	ldr r2, = 51471
+	movs r0, r0
+	bpl __jisuan_jiaodu_bushi0
+	mvns r0, r0
+	adds r0, r0, # 1
+	movs r4, # 1
+	b __jiance_chao90
+__jisuan_jiaodu_bushi0:
+	movs r4, # 0
+__jiance_chao90:
+	cmp r0, r1
+	bls __xiaoyu_90
+	ldr r6, = 18000
+	subs r0, r6, r0
+	movs r6, # 1
+	b __suan_cossin
+__xiaoyu_90:
+	movs r6, # 0
+__suan_cossin:
+	ldr r5, = 10000
+	muls r0, r0, r5
+	@bl _chufa
+	udiv r0, r0, r1
+	muls r0, r0, r2
+	mov r1, r5
+	@bl _chufa
+	udiv r0, r0, r1
+	cmp r4, # 1
+	bne __suan_cos_sin1
+	mvns r0, r0
+	adds r0, r0, # 1
+__suan_cos_sin1:
+	bl __cordic_cos_sin
+	cmp r6, # 1
+	bne __cos_sin_fanhui
+	mvns r0, r0
+	adds r0, r0, # 1
+__cos_sin_fanhui:
+	cmp r7, # 1
+	bne __cossin_fh
+	mvns r0, r0
+	mvns r1, r1
+	adds r0, r0, # 1
+	adds r1, r1, # 1
+__cossin_fh:
+	pop {r2-r7,pc}
+__cordic_cos_sin:
+	@入口R0
+	@出口R0=COS，R1=SIN
+	@ x= 0x4dba
+	@ r1=x,r2=y,r0=z,r4=d,r5=k,r6=cordic_mabiao
 
+	push {r2-r7,lr}
+	mov r2, r8
+	mov r3, r9
+	push {r2-r3}
+	movs r5, # 0
+	mov r2, r5
+	mov r4, r5
+	ldr r1, = 0x4dba
+cordicxunhuan:						 @ 循环
+	asrs r4, r0, # 15
+	@ x
+	mov r7, r2
+	asrs r2, r2, r5
+	eors r2, r2, r4
+	subs r2, r2, r4
+	subs r3, r1, r2
+	@ y
+	mov r6, r1
+	asrs r1, r1, r5
+	eors r1, r1, r4
+	subs r1, r1, r4
+	adds r7, r7, r1
+	@ z
+	ldr r6, = cordic_yong_atan_biao
+	lsls r2, r5, # 2
+	ldr r1, [r6, r2]
+	eors r1, r1, r4
+	subs r1, r1, r4
+	subs r0, r0, r1
+	mov r1, r3
+	mov r2, r7
+	adds r5, # 1
+	cmp r5, # 16
+	bne cordicxunhuan
+	mov r0, r3
+	mov r1, r7
+	pop {r2-r3}
+	mov r8, r2
+	mov r9, r3
+	pop {r2-r7,pc}
+__atan2_ji_suan:						@jt
+	@入口R0=实部，R1=虚部，结果=R0
+	push {r2-r7,lr}
+	mov r2, r8
+	push {r2}
+	ldr r3, = cordic_yong_cos_sin
+	movs r2, # 10
+	muls r0, r0, r2
+	muls r1, r1, r2
+	movs r2, # 0
+	mov r8, r2
+	ldr r4, = 9000
+	lsls r4, r4, # 15
+__cordic_atan2_xun_huan:
+__du_cos_sin:
+	ldr r5, [r3]	@cos
+	adds r3, r3, # 4
+	mov r7, r5
+	ldr r6, [r3]	@sin
+	adds r3, r3, # 4
+	mov r2, r6
+	muls r5, r5, r0         @x*cos
+	muls r2, r2, r0         @x*sin
+	muls r6, r6, r1         @y*sin
+	muls r7, r7, r1         @y*cos
+	movs r1, r1
+	bpl __ni_shi_zhen_zhuan
+__shun_shi_zhen_zhuan:
+	subs r5, r5, r6
+	adds r7, r7, r2
+	mov r6, r8
+	adds r6, r6, r4
+	mov r8, r6
+	b __xuan_zhuan_wan
+__ni_shi_zhen_zhuan:
+	adds r5, r5, r6
+	subs r7, r7, r2
+	mov r6, r8
+	subs r6, r6, r4
+	mov r8, r6
+__xuan_zhuan_wan:
+	ldr r6, = cordic_yong_cos_sin
+	movs r2, # 32
+	lsls r2, r2, # 2
+	adds r6, r6, r2
+	asrs r5, r5, # 14
+	asrs r7, r7, # 14
+	mov r0, r5
+	mov r1, r7
+	lsrs r4, r4, # 1	@旋转
+	cmp r3,	r6
+	bne __cordic_atan2_xun_huan
+	mov r0, r8
+	mvns r0, r0
+	adds r0, r0, # 1
+	@	asrs r0, r0, # 15      @除32768等于角度
+	pop {r2}
+	mov r8, r2
+	pop {r2-r7,pc}
+	.ltorg
+
+
+__suan_atan2:
+	@入口R0=实部，R1=虚部
+	@出口R0=角度
+	push {r2-r6,lr}
+	ldr r6, = atan_biao
+	movs r2, # 0
+	mov r3, r2
+	movs r0, r0
+	bpl __panduan_xubu
+	ldr r2, = 5898240
+	mvns r0, r0
+	mvns r1, r1
+	adds r0, r0, # 1
+	adds r1, r1, # 1
+__panduan_xubu:
+	movs r1, r1
+	bpl __suan_atan2_xunhuan
+	ldr r2, = 11796480
+__suan_atan2_xunhuan:
+	movs r1, r1
+	bpl __atan2_zhengzhuan
+	mov r4, r0	@x
+	mov r5, r1	@y
+	asrs r5, r5, r3
+	asrs r4, r4, r3
+	subs r0, r0, r5
+	adds r1, r1, r4
+	mov r4, r3
+	lsls r4, r4, # 2
+	ldr r4, [r6, r4]
+	subs r2, r2, r4
+	b __atan2_xuanzhuan
+__atan2_zhengzhuan:
+	mov r4, r0	@x
+	mov r5, r1	@y
+	asrs r5, r5, r3
+	asrs r4, r4, r3
+	adds r0, r0, r5
+	subs r1, r1, r4
+	mov r4, r3
+	lsls r4, r4, # 2
+	ldr r4, [r6, r4]
+	adds r2, r2, r4
+__atan2_xuanzhuan:
+	adds r3, r3, # 1
+	cmp r3, # 21
+	bne __suan_atan2_xunhuan
+	mov r1, r0
+	mov r0,r2
+	pop {r2-r6,pc}
+	
+
+	
 __xianshi_zukang_danwei:
 	push {r0-r4,lr}
 	ldr r0, = liangcheng
@@ -6629,7 +7661,7 @@ __xie_lcd_weizhi:
 
 
 __xie_ascii:
-	push {r5-r7,lr}
+	push {r3-r7,lr}
 	@入口r0=ascii地址
 	@r1=写几个字
 	@r2=要写的地址
@@ -6665,7 +7697,7 @@ __duwan_ziku1:
 	bne __du_ascii2
 	pop {r6}
 	mov r6, r9
-	pop {r5-r7,pc}
+	pop {r3-r7,pc}
 
 __xie_alabo:
 	push {r5-r7,lr}
@@ -6903,7 +7935,6 @@ _systickzhongduan:	@syzd
 	ldr r1, = shangbi_r
 	str r0, [r1]
 
-	bl __xiangwei_xuanzhuan
 @	ldr r0, = shangbi_r
 @	ldr r1, = shangbi_i
 @	ldr r0, [r0]
@@ -6913,6 +7944,26 @@ _systickzhongduan:	@syzd
 @	ldr r1, = z_r
 @	str r0, [r1]
 
+
+
+
+
+	ldr r0, = liangcheng
+	ldr r2, = 0x40040000
+	ldr r3, [r0]
+	cmp r3, # 1
+	beq __haoou_dang
+__ou_dang:
+	movw r3, # 0x8000
+	strh r3, [r2, # 0x08]
+	b __systick_fanhui
+__haoou_dang:
+	movw r3, # 0x8000
+	strh r3, [r2, # 0x0a]
+
+
+
+	
 __systick_fanhui:
 	ldr r0, = 0xe0000d04
 	ldr r1, = 0x02000000
@@ -6944,32 +7995,119 @@ aaa:
 	.equ lvboqizhizhen1,            0x20006000
 	.equ lvboqihuanchong1,          0x20006008
 
-	.equ liangcheng,	0x20007fd8
-	.equ lvbo_changdu,	0x20007fdc
-	.equ lvbo_youyi,	0x20007fe0
-	.equ shangbi_rr,	0x20007fe4
-	.equ shangbi_ii,	0x20007fe8
-	.equ shangbi_r,		0x20007fec
-	.equ shangbi_i,		0x20007ff0
-	.equ z_r,		0x20007ff4		
-	.equ z_i,		0x20007ff8
-	.equ jishu,		0x20007ffc
+	.equ qiwang_jiaodu,		0x20007ee4
+	.equ jiaozhun_bianhao,		0x20007ee8
+	.equ chuchang_r,		0x20007eec
+	.equ chuchang_i,		0x20007ef0
+	.equ jiaodu_r,			0x20007ef4
+	.equ jiaodu_i,			0x20007ef8
+	.equ r,				0x20007efc
+	.equ mr,			0x20007fd0
+	.equ jiaodu,			0x20007fd4
+	.equ liangcheng,		0x20007fd8
+	.equ lvbo_changdu,		0x20007fdc
+	.equ lvbo_youyi,		0x20007fe0
+	.equ shangbi_rr,		0x20007fe4
+	.equ shangbi_ii,		0x20007fe8
+	.equ shangbi_r,			0x20007fec
+	.equ shangbi_i,			0x20007ff0
+	.equ z_r,			0x20007ff4		
+	.equ z_i,			0x20007ff8
+	.equ jishu,			0x20007ffc
 	
 
-d:
-	.int 0x12341234,0x12341234,0x12341234,0x12341234
-yjmwxwx:
-	.ascii "yjmwxwx-20230928"
+f_chuchang_r:
+	.int 19504
+f_chuchang_i:
+	.int 19320
+f_jiaodu_r:
+	.int 32538
+f_jiaodu_i:
+	.int -3867
+f_r:
+	.int 0
+f_mr:
+	.int 0
+	
+
+
+
+
+
+
+
+
+	
+an_jian_biao:
+	.word __anjian0	+1
+	.word __anjian1	+1
+	.word __anjian2	+1
+	.word __anjian3	+1
+cordic_yong_atan_biao:			@弧度
+	.int 0x00006487,0x00003B58,0x00001F5B,0x00000FEA,0x000007FD,0x000003FF,0x000001FF,0x000000FF,0x0000007F,0x0000003F,0x0000001F,0x0000000F,0x00000007,0x00000003,0x00000001,0x00000000
+cordic_yong_cos_sin:
+	.int 0x0000,0x4000,0x2D41,0x2D41,0x3B20,0x187D,0x3EC5,0x0C7C,0x3FB1,0x0645,0x3FEC,0x0323,0x3FFB,0x0192,0x3FFE,0x00C9,0x3FFF,0x0064,0x3FFF,0x0032,0x3FFF,0x0019,0x3FFF,0x000C,0x3FFF,0x0006,0x3FFF,0x0003,0x3FFF,0x0001,0x3FFF,0x0000
+atan_biao:			@角度
+	.int 0x00168000,0x000D4853,0x000704A3,0x00039000,0x0001C9C5,0x0000E51B,0x00007295,0x0000394B,0x00001CA5,0x00000E52,0x00000729,0x00000394,0x000001CA,0x000000E5,0x00000072,0x00000039,0x0000001C,0x0000000E,0x00000007,0x00000003,0x00000001
+	.align 4
+xiaoshudian_weizhi:
+	.byte 1,3
+	.align 4
+chuchang_dianzu:
+	.int 7124,20591		@2欧=7124 58毫欧=20591
+chuchang_jiaodu:
+	.int -3697,32558
+chuchang_duanlu_r:
+	.int 0,0
 	.align 4
 rs_danwei_biao:				@31=毫欧，91=欧，81=千欧，41=兆欧
 	.byte 91,31
+
+danwei_biao:
+	.byte 0x40,0x80
+	.align 4
+yjmwxwx:
+	.ascii "yjmwxwx-20230828"
+	.align 4
+p0:
+	.ascii "P-00"
+p1:
+	.ascii "P-01"
+p2:
+	.ascii "P-02"
+wan:
+	.ascii "END "
+p0jz:
+	.ascii "p0jz"
+p1jz:
+	.ascii "p1jz"
+p2jz:
+	.ascii "p2jz"
+kong:
+	.int 0x20202020
+_fu:
+	.ascii "-"
+	.align 4
+jiaozhun_biao:
+	.word __qingling +1
+	.word __xiangwei +1
+	.word __z_r	 +1
+
+
+
+
+
+
+
+
+
+
+
+	
 	.align 4
 cos_sin_biao_1k:
 	.int 0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93EE,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC981,0xFFFF8C2F,0xFFFFBB6B,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02B,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x367F,0x73D1,0x4495,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD5,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93EE,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC981,0xFFFF8C2F,0xFFFFBB6B,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02B,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x367F,0x73D1,0x4495,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD5,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93EE,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC981,0xFFFF8C2F,0xFFFFBB6B,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02B,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x367F,0x73D1,0x4495,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD5,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93EE,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC981,0xFFFF8C2F,0xFFFFBB6B,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02B,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C13,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x367F,0x73D1,0x4495,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD5,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93EE,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC981,0xFFFF8C2F,0xFFFFBB6A,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02B,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x367F,0x73D1,0x4495,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD5,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93EE,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC980,0xFFFF8C2F,0xFFFFBB6A,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02C,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x3680,0x73D1,0x4496,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD5,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02C,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93EE,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC981,0xFFFF8C2F,0xFFFFBB6A,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02B,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD4,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x3680,0x73D1,0x4496,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD4,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF5,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93EE,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC980,0xFFFF8C2F,0xFFFFBB6B,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02B,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x367F,0x73D1,0x4496,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD5,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5196,0xFFFF9D60,0x4495,0xFFFF93ED,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FC,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC981,0xFFFF8C2F,0xFFFFBB6B,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC256,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02B,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100A,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x367F,0x73D1,0x4495,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DA9,0x7702,0x2F1E,0x7BFA,0x1FD4,0x7EFD,0x100A,0x8000,0x0000,0x7EFD,0xFFFFEFF6,0x7BFA,0xFFFFE02B,0x7702,0xFFFFD0E2,0x702A,0xFFFFC256,0x678D,0xFFFFB4C4,0x5D4E,0xFFFFA861,0x5197,0xFFFF9D60,0x4495,0xFFFF93ED,0x367F,0xFFFF8C2F,0x278D,0xFFFF8644,0x17FB,0xFFFF8245,0x0809,0xFFFF8041,0xFFFFF7F7,0xFFFF8041,0xFFFFE804,0xFFFF8245,0xFFFFD873,0xFFFF8644,0xFFFFC981,0xFFFF8C2F,0xFFFFBB6A,0xFFFF93EE,0xFFFFAE69,0xFFFF9D60,0xFFFFA2B2,0xFFFFA861,0xFFFF9873,0xFFFFB4C4,0xFFFF8FD6,0xFFFFC257,0xFFFF88FE,0xFFFFD0E2,0xFFFF8406,0xFFFFE02C,0xFFFF8103,0xFFFFEFF6,0xFFFF8000,0x0000,0xFFFF8103,0x100B,0xFFFF8406,0x1FD5,0xFFFF88FE,0x2F1E,0xFFFF8FD6,0x3DAA,0xFFFF9873,0x4B3C,0xFFFFA2B2,0x579F,0xFFFFAE69,0x62A0,0xFFFFBB6B,0x6C12,0xFFFFC981,0x73D1,0xFFFFD873,0x79BC,0xFFFFE804,0x7DBB,0xFFFFF7F7,0x7FBF,0x0809,0x7FBF,0x17FC,0x7DBB,0x278D,0x79BC,0x3680,0x73D1,0x4495,0x6C12,0x5197,0x62A0,0x5D4E,0x579F,0x678D,0x4B3C,0x702A,0x3DAA,0x7702,0x2F1E,0x7BFA,0x1FD4,0x7EFD,0x100A
 	
-	
-atan_biao:				@角度
-	.int 0x00168000,0x000D4853,0x000704A3,0x00039000,0x0001C9C5,0x0000E51B,0x00007295,0x0000394B,0x00001CA5,0x00000E52,0x00000729,0x00000394,0x000001CA,0x000000E5,0x00000072,0x00000039,0x0000001C,0x0000000E,0x00000007,0x00000003,0x00000001
 da_a_labo_hack:		 @16*24
 	.byte 0x00, 0x00, 0x00, 0x80, 0xFF, 0x01, 0xF0, 0xFF, 0x0F, 0xF8, 0xFF, 0x1F, 0x7C, 0x00, 0x3E, 0x1E, 0x00, 0x78, 0x0E, 0x00, 0x70, 0x0E, 0x00, 0x70, 0x0E, 0x00, 0x70, 0x0E, 0x00, 0x70, 0x1E, 0x00, 0x78, 0x7C, 0x00, 0x3E, 0xF8, 0xFF, 0x1F, 0xF0, 0xFF, 0x0F, 0x80, 0xFF, 0x01, 0x00, 0x00, 0x00 @ 0
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x70, 0x00, 0x70, 0x70, 0x00, 0x70, 0x70, 0x00, 0x70, 0x78, 0x00, 0x70, 0xFC, 0xFF, 0x7F, 0xFE, 0xFF, 0x7F, 0xFE, 0xFF, 0x7F, 0x00, 0x00, 0x70, 0x00, 0x00, 0x70, 0x00, 0x00, 0x70, 0x00, 0x00, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 @ 1
