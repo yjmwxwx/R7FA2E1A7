@@ -126,13 +126,12 @@ buzhidao1:
 	.int 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF
 	
 kaishi:
-	bkpt # 1
+@	bkpt # 1
 
         ldr r0, = 0x407ec000
-
 	movs r1, # 0x01
 	movs r2, # 0x90
-	strb r1, [r0, r2]
+	strb r1, [r0, r2]	@开DATA FLASH
 	
 	
 shizhong:
@@ -168,223 +167,7 @@ _neicunqinglingxunhuan:
 	bne _neicunqinglingxunhuan
 
 	
-__xie_flash:
-	ldr r0, = 0x407ec000
-	
-	movs r1, # 0x01
-	movs r2, # 0x90
-	strb r1, [r0, r2]
-	
-	movw r1, # 0xaa80
-	movw r2, # 0x3fb0
-	strh r1, [r0, r2]
 
-	movs r1, # 0xa5
-	movw r2, # 0x180
-	strb r1, [r0, r2]
-
-	movs r1, # 0x10
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0xef
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0x10
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-	
-	movs r1, # 0x1f
-	movw r2, # 0x1d8
-	strb r1, [r0, r2]
-
-	movw r1, # 0xfe00
-	movw r2, # 0x110
-	strh r1, [r0, r2]
-	
-	movw r1, # 0x0000
-	movw r2, # 0x108
-	strh r1, [r0, r2]
-	
-	movw r1, # 0xfe00
-        movw r2, # 0x120
-	strh r1, [r0, r2]
-	
-	movw r1, # 0x0fff
-        movw r2, # 0x118
-	strh r1, [r0, r2]
-	
-@	movs r1, # 0xa5			@写FLASH
-@	movw r2, # 0x130
-@	strb r1, [r0, r2]
-
-	movs r1, # 0x84			@0X81写
-	movw r2, # 0x114
-	strb r1, [r0, r2]	@FCR
-
-	movw r2, # 0x12c
-__FRDY_1:	
-	ldrb r1, [r0, r2]
-	lsls r1, r1, # 25
-	bpl __FRDY_1
-
-	movs r1, # 0x01
-	movw r2, # 0x114
-	strb r1, [r0, r2]       @FCR
-
-	movs r1, # 0x00
-	movw r2, # 0x114
-	strb r1, [r0, r2]       @FCR
-
-	movw r2, # 0x12c
-__FRDY_0:
-	ldrb r1, [r0, r2]
-	lsls r1, r1, # 25
-	bmi __FRDY_0
-
-        movw r2, # 0x1f0
-__ILGLERR_0:
-	ldrb r1, [r0, r2]
-	lsls r1, r1, # 28
-	bmi __ILGLERR_0
-
-	movw r2, # 0x1f0
-__PRGERR_0:
-	ldrb r1, [r0, r2]
-	lsls r1, r1, # 30
-	bmi __PRGERR_0
-	
-        movw r1, # 0xaa00
-	movw r2, # 0x3fb0
-	strh r1, [r0, r2]
-	
-	movs r1, # 0xa5
-	movw r2, # 0x180
-	strb r1, [r0, r2]
-
-	movs r1, # 0x08
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0xf7
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0x08
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-	
-	
-@	bkpt # 2
-
-	ldr r0, = 0x407ec000
-
-	movs r1, # 0x01
-	movs r2, # 0x90
-	strb r1, [r0, r2]
-
-	movw r1, # 0xaa80
-	movw r2, # 0x3fb0
-	strh r1, [r0, r2]
-
-	movs r1, # 0xa5
-	movw r2, # 0x180
-	strb r1, [r0, r2]
-
-	movs r1, # 0x10
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0xef
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0x10
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0x1f
-	movw r2, # 0x1d8
-	strb r1, [r0, r2]
-
-	movw r1, # 0xfe00
-	movw r2, # 0x110
-	strh r1, [r0, r2]
-
-	movw r1, # 0x0000
-	movw r2, # 0x108
-	strh r1, [r0, r2]
-
-	movw r1, # 0xfe00
-	movw r2, # 0x120
-	strh r1, [r0, r2]
-
-	movw r1, # 0x0fff
-	movw r2, # 0x118
-	strh r1, [r0, r2]
-
-	movs r1, # 0xa5			@写FLASH
-	movw r2, # 0x130
-	strb r1, [r0, r2]
-
-	movs r1, # 0x81			@0X81写
-	movw r2, # 0x114
-	strb r1, [r0, r2]	@FCR
-
-	movw r2, # 0x12c
-___FRDY_1:
-	ldrb r1, [r0, r2]
-	lsls r1, r1, # 25
-	bpl ___FRDY_1
-
-	movs r1, # 0x01
-	movw r2, # 0x114
-	strb r1, [r0, r2]       @FCR
-
-	movs r1, # 0x00
-	movw r2, # 0x114
-	strb r1, [r0, r2]       @FCR
-
-	movw r2, # 0x12c
-___FRDY_0:
-	ldrb r1, [r0, r2]
-	lsls r1, r1, # 25
-	bmi ___FRDY_0
-
-	movw r2, # 0x1f0
-___ILGLERR_0:
-	ldrb r1, [r0, r2]
-	lsls r1, r1, # 28
-	bmi ___ILGLERR_0
-
-	movw r2, # 0x1f0
-___PRGERR_0:
-	ldrb r1, [r0, r2]
-	lsls r1, r1, # 30
-	bmi ___PRGERR_0
-
-	movw r1, # 0xaa00
-	movw r2, # 0x3fb0
-	strh r1, [r0, r2]
-
-	movs r1, # 0xa5
-	movw r2, # 0x180
-	strb r1, [r0, r2]
-
-	movs r1, # 0x08
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0xf7
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-	movs r1, # 0x08
-	movw r2, # 0x100
-	strb r1, [r0, r2]
-
-@	bkpt # 3
 	
 
 
@@ -626,30 +409,32 @@ __gpt_shezhi:					@定时器初始化
 	str r1, [r0]
 	bl __xianshi_zukang_danwei
 
-
-
-
-
-
-ddaa:	
+__huifu_chuchang:
 	ldr r0, = 0x40100000
-	ldrh r0, [r0]
-	movs r1, # 6
-	ldr r2, = asciibiao
-	movs r3, # 0xff            @小数点位置
-	bl _zhuanascii
-	movs r0, # 6            @写几个字
-	movs r1, # 48           @字库单字长度
-	movs r2, # 3            @宽度
-	ldr r3, = 0x1102              @lcd位置
-	bl __xie_lcd_ascii
-	b ddaa
+	ldr r1, [r0]
+	ldr r2, = 0xffffffff
+	cmp r2, r1
+	bne __tiaoguo_chuchang_chushihua
+	ldr r0, = chuchang_dianzu
+	ldr r1, [r0]
+	ldr r2, [r0, # 0x04]
+	ldr r3, [r0, # 0x08]
+	ldr r4, [r0, # 0x0c]
+	ldr r5, [r0, # 0x10]
+	ldr r6, [r0, # 0x14]
+	ldr r7, [r0, # 0x18]
+	ldr r0, = chuchang_r
+	str r1, [r0]
+	str r2, [r0, # 0x04]
+	str r3, [r0, # 0x08]
+	str r4, [r0, # 0x0c]
+	str r5, [r0, # 0x10]
+	str r6, [r0, # 0x14]
+	str r7, [r0, # 0x18]
+	bl __xie_flash
+__tiaoguo_chuchang_chushihua:	
 
-
-
-
-
-	
+		
 
 __anjian0:
 	b ting
@@ -897,7 +682,7 @@ __duanlu_qingling_wan:
 __yy:
 	subs r7, r7, # 1
 	bne __yy
-@	bl __xie_flash
+	bl __xie_flash
 	bkpt # 1
 	
 
@@ -990,7 +775,7 @@ __jiaodu_shezhi_wan:
 __yy2:
 	subs r7, r7, # 1
 	bne __yy2
-	@	bl __xie_flash
+	bl __xie_flash
 	bkpt # 1
 	
 __shezhi_jiaodu_xianshi:
@@ -1072,7 +857,7 @@ __shezhi_z_r_wan:
 __yy3:
 	subs r7, r7, # 1
 	bne __yy3
-@	bl __xie_flash
+	bl __xie_flash
 	bkpt # 1
 
 __shezhi_z_r_xianshi:
@@ -1189,6 +974,252 @@ __xianshi_z_r:
 	ldr r3, = 0x1102              @lcd位置
 	bl __xie_lcd_ascii
 	pop {r3-r6,pc}
+
+
+
+__xie_flash:
+__ca_flash:	
+	ldr r0, = 0x407ec000
+	
+	movs r1, # 0x01
+	movs r2, # 0x90
+	strb r1, [r0, r2]
+	
+	movw r1, # 0xaa80
+	movw r2, # 0x3fb0
+	strh r1, [r0, r2]
+
+	movs r1, # 0xa5
+	movw r2, # 0x180
+	strb r1, [r0, r2]
+
+	movs r1, # 0x10
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0xef
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x10
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+	
+	movs r1, # 0x1f
+	movw r2, # 0x1d8
+	strb r1, [r0, r2]
+
+	movw r1, # 0xfe00
+	movw r2, # 0x110
+	strh r1, [r0, r2]
+	
+	movw r1, # 0x0000
+	movw r2, # 0x108
+	strh r1, [r0, r2]
+	
+	movw r1, # 0xfe00
+        movw r2, # 0x120
+	strh r1, [r0, r2]
+	
+	movw r1, # 0x0fff
+        movw r2, # 0x118
+	strh r1, [r0, r2]
+	
+@	movs r1, # 0xa5			@写FLASH
+@	movw r2, # 0x130
+@	strb r1, [r0, r2]
+
+	movs r1, # 0x84			@0X81写
+	movw r2, # 0x114
+	strb r1, [r0, r2]	@FCR
+
+	movw r2, # 0x12c
+__FRDY_1:	
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 25
+	bpl __FRDY_1
+
+	movs r1, # 0x01
+	movw r2, # 0x114
+	strb r1, [r0, r2]       @FCR
+
+	movs r1, # 0x00
+	movw r2, # 0x114
+	strb r1, [r0, r2]       @FCR
+
+	movw r2, # 0x12c
+__FRDY_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 25
+	bmi __FRDY_0
+
+        movw r2, # 0x1f0
+__ILGLERR_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 28
+	bmi __ILGLERR_0
+
+	movw r2, # 0x1f0
+__PRGERR_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 30
+	bmi __PRGERR_0
+	
+        movw r1, # 0xaa00
+	movw r2, # 0x3fb0
+	strh r1, [r0, r2]
+	
+	movs r1, # 0xa5
+	movw r2, # 0x180
+	strb r1, [r0, r2]
+
+	movs r1, # 0x08
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0xf7
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x08
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+	
+	
+	@	bkpt # 2
+__xie__flash:	
+	ldr r0, = 0x407ec000
+
+	movs r1, # 0x01
+	movs r2, # 0x90
+	strb r1, [r0, r2]
+
+	movw r1, # 0xaa80
+	movw r2, # 0x3fb0
+	strh r1, [r0, r2]
+
+	movs r1, # 0xa5
+	movw r2, # 0x180
+	strb r1, [r0, r2]
+
+	movs r1, # 0x10
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0xef
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x10
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x1f
+	movw r2, # 0x1d8
+	strb r1, [r0, r2]
+
+	movw r1, # 0xfe00
+	movw r2, # 0x110
+	strh r1, [r0, r2]
+
+	movw r1, # 0x0000
+	movw r2, # 0x108
+	strh r1, [r0, r2]
+
+	movw r1, # 0xfe00
+	movw r2, # 0x120
+	strh r1, [r0, r2]
+
+	movw r1, # 0x0fff
+	movw r2, # 0x118
+	strh r1, [r0, r2]
+
+	movs r3, # 0
+__xie_flash_xunhuan:
+	ldr r4, = chuchang_r
+	ldrb r1, [r4, r3]
+@	movs r1, # 0xa5			@写FLASH
+	movw r2, # 0x130
+	strb r1, [r0, r2]
+
+	movs r1, # 0x81			@0X81写
+	movw r2, # 0x114
+	strb r1, [r0, r2]	@FCR
+
+	movw r2, # 0x12c
+___FRDY_1:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 25
+	bpl ___FRDY_1
+
+	movs r1, # 0x01
+	movw r2, # 0x114
+	strb r1, [r0, r2]       @FCR
+
+	movs r1, # 0x00
+	movw r2, # 0x114
+	strb r1, [r0, r2]       @FCR
+
+	movw r2, # 0x12c
+___FRDY_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 25
+	bmi ___FRDY_0
+
+	movw r2, # 0x1f0
+___ILGLERR_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 28
+	bmi ___ILGLERR_0
+
+	movw r2, # 0x1f0
+___PRGERR_0:
+	ldrb r1, [r0, r2]
+	lsls r1, r1, # 30
+	bmi ___PRGERR_0
+	adds r3, r3, # 1
+	cmp r3, # 28
+	bne __xie_flash_xunhuan
+	
+
+
+
+
+
+
+	
+	movw r1, # 0xaa00
+	movw r2, # 0x3fb0
+	strh r1, [r0, r2]
+
+	movs r1, # 0xa5
+	movw r2, # 0x180
+	strb r1, [r0, r2]
+
+	movs r1, # 0x08
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0xf7
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+
+	movs r1, # 0x08
+	movw r2, # 0x100
+	strb r1, [r0, r2]
+	
+	ldr r0, = 0xe000ed0c
+	ldr r1, = 0x05fa0004
+	str r1, [r0]          		@复位
+__deng_fuwei:
+	b __deng_fuwei
+
+	
+@	bkpt # 3
+
+
+
+
 
 
 
@@ -7995,14 +8026,15 @@ aaa:
 	.equ lvboqizhizhen1,            0x20006000
 	.equ lvboqihuanchong1,          0x20006008
 
-	.equ qiwang_jiaodu,		0x20007ee4
-	.equ jiaozhun_bianhao,		0x20007ee8
-	.equ chuchang_r,		0x20007eec
-	.equ chuchang_i,		0x20007ef0
-	.equ jiaodu_r,			0x20007ef4
-	.equ jiaodu_i,			0x20007ef8
-	.equ r,				0x20007efc
-	.equ mr,			0x20007fd0
+	.equ qiwang_jiaodu,		0x20007ee0
+	.equ jiaozhun_bianhao,		0x20007ee4
+	.equ chuchang_r,		0x20007ee8
+	.equ chuchang_i,		0x20007eec
+	.equ jiaodu_r,			0x20007ef0
+	.equ jiaodu_i,			0x20007ef4
+	.equ r,				0x20007ef8
+	.equ mr,			0x20007efc
+	.equ dianya_jz,			0x20007fd0
 	.equ jiaodu,			0x20007fd4
 	.equ liangcheng,		0x20007fd8
 	.equ lvbo_changdu,		0x20007fdc
@@ -8014,23 +8046,25 @@ aaa:
 	.equ z_r,			0x20007ff4		
 	.equ z_i,			0x20007ff8
 	.equ jishu,			0x20007ffc
-	
 
-f_chuchang_r:
-	.int 19504
-f_chuchang_i:
-	.int 19320
-f_jiaodu_r:
-	.int 32538
-f_jiaodu_i:
-	.int -3867
-f_r:
-	.int 0
-f_mr:
-	.int 0
+	.equ f_chuchang_r,                0x40100000
+	.equ f_chuchang_i,                0x40100004
+	.equ f_jiaodu_r,                  0x40100008
+	.equ f_jiaodu_i,                  0x4010000c
+	.equ f_r,                         0x40100010
+	.equ f_mr,                        0x40100014
+	.equ f_dianya_jz,                 0x40100018
 	
 
 
+chuchang_dianzu:
+	.int 32768,32768		@2欧=7124 58毫欧=20591
+chuchang_jiaodu:
+	.int 32768,0
+chuchang_duanlu_r:
+	.int 0,0
+chuchang_dianya_jz:
+	.int 32768
 
 
 
@@ -8052,13 +8086,6 @@ atan_biao:			@角度
 	.align 4
 xiaoshudian_weizhi:
 	.byte 1,3
-	.align 4
-chuchang_dianzu:
-	.int 7124,20591		@2欧=7124 58毫欧=20591
-chuchang_jiaodu:
-	.int -3697,32558
-chuchang_duanlu_r:
-	.int 0,0
 	.align 4
 rs_danwei_biao:				@31=毫欧，91=欧，81=千欧，41=兆欧
 	.byte 91,31
